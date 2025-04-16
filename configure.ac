@@ -3,5 +3,5 @@ AM_INIT_AUTOMAKE([foreign subdir-objects])
 AC_PROG_CC
 AC_PROG_RANLIB
 
-AC_CONFIG_FILES([Makefile LibTi/Makefile TiPck/Makefile TiExt/Makefile])
+AC_CONFIG_FILES([Makefile libti/Makefile tipck/Makefile tiext/Makefile])
 AC_OUTPUT

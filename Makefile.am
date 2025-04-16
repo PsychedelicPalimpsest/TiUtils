@@ -1,1 +1,1 @@
-SUBDIRS = LibTi TiPck TiExt
+SUBDIRS = libti tipck tiext
