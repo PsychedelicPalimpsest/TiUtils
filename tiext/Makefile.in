@@ -251,6 +251,7 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 tiext_SOURCES = tiext.c
 tiext_LDADD = ../libti/libti.a
+AM_CPPFLAGS = -I$(top_srcdir)/libti/
 all: all-am
 
 .SUFFIXES:

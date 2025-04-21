@@ -18,8 +18,8 @@ extern const uint8_t BIN_TO_HEX_MAP[16];
  *      If you provide a large length it will barrel through
  *      lots of memory.
  */
-static void hex2bin(uint8_t* dest, uint8_t* src, size_t length){
-    uint8_t idx0, idx1;
+static void hex2bin(char* dest, char* src, size_t length){
+    char idx0, idx1;
 
     /* Amount of bytes to write */
     length >>= 1;
@@ -29,7 +29,7 @@ static void hex2bin(uint8_t* dest, uint8_t* src, size_t length){
         idx0 = (*(src++) & 0x1F) ^ 0x10;
         idx1 = (*(src++) & 0x1F) ^ 0x10;
 
-        *(dest++) = (uint8_t)(HEX_TO_BIN_MAP[idx0] << 4) | HEX_TO_BIN_MAP[idx1];
+        *(dest++) = (char)(HEX_TO_BIN_MAP[idx0] << 4) | HEX_TO_BIN_MAP[idx1];
     }
 }
 
@@ -44,9 +44,9 @@ static void hex2bin(uint8_t* dest, uint8_t* src, size_t length){
  *      If you provide a large length it will barrel through
  *      lots of memory.
  */
-static void bin2hex(uint8_t* dest, uint8_t* src, size_t length){
+static void bin2hex(char* dest, char* src, size_t length){
     while (length--){
-        *(dest++) = BIN_TO_HEX_MAP[*src & 0xF0 >> 4];
+        *(dest++) = BIN_TO_HEX_MAP[(*src & 0xF0) >> 4];
         *(dest++) = BIN_TO_HEX_MAP[*src & 0x0F];
         src++;
     }

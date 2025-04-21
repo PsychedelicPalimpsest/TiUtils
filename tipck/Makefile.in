@@ -251,6 +251,7 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 tipck_SOURCES = tipck.c
 tipck_LDADD = ../libti/libti.a
+tiext_CFLAGS = -I../libti
 all: all-am
 
 .SUFFIXES:

@@ -107,7 +107,8 @@ am__v_AR_1 =
 libti_a_AR = $(AR) $(ARFLAGS)
 libti_a_RANLIB = $(RANLIB)
 libti_a_LIBADD =
-am_libti_a_OBJECTS = hex.$(OBJEXT)
+am_libti_a_OBJECTS = hex.$(OBJEXT) tihex.$(OBJEXT) \
+	linkFormats.$(OBJEXT)
 libti_a_OBJECTS = $(am_libti_a_OBJECTS)
 AM_V_P = $(am__v_P_@AM_V@)
 am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
@@ -124,7 +125,8 @@ am__v_at_1 =
 DEFAULT_INCLUDES = -I.@am__isrc@
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__maybe_remake_depfiles = depfiles
-am__depfiles_remade = ./$(DEPDIR)/hex.Po
+am__depfiles_remade = ./$(DEPDIR)/hex.Po ./$(DEPDIR)/linkFormats.Po \
+	./$(DEPDIR)/tihex.Po
 am__mv = mv -f
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
@@ -256,7 +258,7 @@ top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 noinst_LIBRARIES = libti.a
-libti_a_SOURCES = hex.c
+libti_a_SOURCES = hex.c tihex.c linkFormats.c
 all: all-am
 
 .SUFFIXES:
@@ -306,6 +308,8 @@ distclean-compile:
 	-rm -f *.tab.c
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/hex.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/linkFormats.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tihex.Po@am__quote@ # am--include-marker
 
 $(am__depfiles_remade):
 	@$(MKDIR_P) $(@D)
@@ -453,6 +457,8 @@ clean-am: clean-generic clean-noinstLIBRARIES mostlyclean-am
 
 distclean: distclean-am
 	-rm -f ./$(DEPDIR)/hex.Po
+	-rm -f ./$(DEPDIR)/linkFormats.Po
+	-rm -f ./$(DEPDIR)/tihex.Po
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
 	distclean-tags
@@ -499,6 +505,8 @@ installcheck-am:
 
 maintainer-clean: maintainer-clean-am
 	-rm -f ./$(DEPDIR)/hex.Po
+	-rm -f ./$(DEPDIR)/linkFormats.Po
+	-rm -f ./$(DEPDIR)/tihex.Po
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
 
