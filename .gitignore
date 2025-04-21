@@ -32,7 +32,11 @@ libtool
 /.libs/
 /.libs/
 /.deps/
+*/.deps/
 /build-aux/
+build/
+.idea/
+compile_commands.json
 
 # Editor/OS files
 *~
@@ -41,9 +45,10 @@ libtool
 Thumbs.db
 
 # Binaries
-TiPck/tipck
-TiExt/tiext
-LibTi/libti.a
+tipck/tipck
+tiext/tiext
+libti/libti.a
 
 # My own example data
 bins/
+
