@@ -4413,7 +4413,7 @@ else
 fi
 
 
-ac_config_files="$ac_config_files Makefile libti/Makefile tipck/Makefile tiext/Makefile"
+ac_config_files="$ac_config_files Makefile libti/Makefile ticonv/Makefile"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -5167,8 +5167,7 @@ do
     "depfiles") CONFIG_COMMANDS="$CONFIG_COMMANDS depfiles" ;;
     "Makefile") CONFIG_FILES="$CONFIG_FILES Makefile" ;;
     "libti/Makefile") CONFIG_FILES="$CONFIG_FILES libti/Makefile" ;;
-    "tipck/Makefile") CONFIG_FILES="$CONFIG_FILES tipck/Makefile" ;;
-    "tiext/Makefile") CONFIG_FILES="$CONFIG_FILES tiext/Makefile" ;;
+    "ticonv/Makefile") CONFIG_FILES="$CONFIG_FILES ticonv/Makefile" ;;
 
   *) as_fn_error $? "invalid argument: '$ac_config_target'" "$LINENO" 5;;
   esac

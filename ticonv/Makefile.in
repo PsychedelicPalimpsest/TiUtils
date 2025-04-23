@@ -88,8 +88,8 @@ POST_INSTALL = :
 NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
-bin_PROGRAMS = tiext$(EXEEXT)
-subdir = tiext
+bin_PROGRAMS = ticonv$(EXEEXT)
+subdir = ticonv
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
@@ -100,9 +100,9 @@ CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
-am_tiext_OBJECTS = tiext.$(OBJEXT)
-tiext_OBJECTS = $(am_tiext_OBJECTS)
-tiext_DEPENDENCIES = ../libti/libti.a
+am_ticonv_OBJECTS = ticonv.$(OBJEXT)
+ticonv_OBJECTS = $(am_ticonv_OBJECTS)
+ticonv_DEPENDENCIES = ../libti/libti.a
 AM_V_P = $(am__v_P_@AM_V@)
 am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
 am__v_P_0 = false
@@ -118,7 +118,7 @@ am__v_at_1 =
 DEFAULT_INCLUDES = -I.@am__isrc@
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__maybe_remake_depfiles = depfiles
-am__depfiles_remade = ./$(DEPDIR)/tiext.Po
+am__depfiles_remade = ./$(DEPDIR)/ticonv.Po
 am__mv = mv -f
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
@@ -132,8 +132,8 @@ AM_V_CCLD = $(am__v_CCLD_@AM_V@)
 am__v_CCLD_ = $(am__v_CCLD_@AM_DEFAULT_V@)
 am__v_CCLD_0 = @echo "  CCLD    " $@;
 am__v_CCLD_1 = 
-SOURCES = $(tiext_SOURCES)
-DIST_SOURCES = $(tiext_SOURCES)
+SOURCES = $(ticonv_SOURCES)
+DIST_SOURCES = $(ticonv_SOURCES)
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
     n|no|NO) false;; \
@@ -249,8 +249,8 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-tiext_SOURCES = tiext.c
-tiext_LDADD = ../libti/libti.a
+ticonv_SOURCES = ticonv.c
+ticonv_LDADD = ../libti/libti.a
 AM_CPPFLAGS = -I$(top_srcdir)/libti/
 all: all-am
 
@@ -265,9 +265,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign tiext/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign ticonv/Makefile'; \
 	$(am__cd) $(top_srcdir) && \
-	  $(AUTOMAKE) --foreign tiext/Makefile
+	  $(AUTOMAKE) --foreign ticonv/Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
 	  *config.status*) \
@@ -328,9 +328,9 @@ uninstall-binPROGRAMS:
 clean-binPROGRAMS:
 	-$(am__rm_f) $(bin_PROGRAMS)
 
-tiext$(EXEEXT): $(tiext_OBJECTS) $(tiext_DEPENDENCIES) $(EXTRA_tiext_DEPENDENCIES) 
-	@rm -f tiext$(EXEEXT)
-	$(AM_V_CCLD)$(LINK) $(tiext_OBJECTS) $(tiext_LDADD) $(LIBS)
+ticonv$(EXEEXT): $(ticonv_OBJECTS) $(ticonv_DEPENDENCIES) $(EXTRA_ticonv_DEPENDENCIES) 
+	@rm -f ticonv$(EXEEXT)
+	$(AM_V_CCLD)$(LINK) $(ticonv_OBJECTS) $(ticonv_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -338,7 +338,7 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tiext.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ticonv.Po@am__quote@ # am--include-marker
 
 $(am__depfiles_remade):
 	@$(MKDIR_P) $(@D)
@@ -488,7 +488,7 @@ clean: clean-am
 clean-am: clean-binPROGRAMS clean-generic mostlyclean-am
 
 distclean: distclean-am
-	-rm -f ./$(DEPDIR)/tiext.Po
+	-rm -f ./$(DEPDIR)/ticonv.Po
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
 	distclean-tags
@@ -534,7 +534,7 @@ install-ps-am:
 installcheck-am:
 
 maintainer-clean: maintainer-clean-am
-	-rm -f ./$(DEPDIR)/tiext.Po
+	-rm -f ./$(DEPDIR)/ticonv.Po
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
 
