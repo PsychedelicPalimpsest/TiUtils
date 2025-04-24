@@ -6,8 +6,6 @@
 #include <endian.h>
 #include <string.h>
 
-/* Not sure why TI adds this, but to be binary identical, we use it */
-static const char TI_FOOTER[] = "   -- CONVERT 2.6 --\r\n\x1a";
 
 /*
  * Mostly just https://en.wikipedia.org/wiki/Intel_HEX, but the TI-84 has

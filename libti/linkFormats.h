@@ -1,6 +1,8 @@
 #pragma once
 #include <stdint.h>
 #include <stdio.h>
+#include "cJSON.h"
+
 
 /* https://merthsoft.com/linkguide/ti83+/fformat.html */
 
@@ -206,9 +208,11 @@ static void print_flash_file(struct FlashFile* file) {
 }
 
 
-
+extern const char FLASH_MAGIC_NUMBER[8];
+extern const char TI_FOOTER[24];
 
 TiError parse_flash(struct FlashFile** dst, char* src, size_t length);
+TiError flash_file_to_json(cJSON** dst, struct FlashFile* src);
 
 /* Simple TI checksum alg. */
 static uint16_t calculate_sum(const char* in, size_t length){

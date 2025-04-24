@@ -3,28 +3,13 @@
 #include <getopt.h>
 #include <string.h>
 
+/* See for a full list of modes and formats */
+#include "modes.h"
+
 #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]))
 
 
 
-enum Mode {
-    MODE_UNKNOWN,
-
-    MODE_EXT_INTEL_HEX,
-    MODE_PCK_INTEL_HEX,
-};
-enum KnownFormat {
-    FMT_UNKNOWN,
-
-    FMT_BIN,
-    FMT_ASM,
-    FMT_TXT,
-    FMT_IHX,
-
-    FMT_8XK,
-    FMT_8XU,
-    FMT_8XQ
-};
 struct ModeDef {
     enum Mode mode;
     char mode_str[128];
@@ -88,7 +73,7 @@ static enum Mode autodetect_mode(int input_file_count, enum KnownFormat input_fo
         char conforms_to_input = 0;
         char conforms_to_output = 0;
 
-        /* Make sure that the input file count, conforms to what we are setting */
+        /* Make sure that the input file count, conforms to what we are expecting */
         if (MODE_ID[i].has_multi_input != input_file_count > 1) continue;
 
         for (int j = 0; j < 16 && MODE_ID[i].input_id[j]; j++) {
@@ -136,8 +121,6 @@ static void print_modes() {
     fprintf(stderr, "\t-m=pck_intel_hex\tihx\t\t\t\t8xk, 8xu, 8xq\t\tPacks the intel hex for a flash file. If the --extra-json is set, will read the metadata from that file\n");
 }
 
-
-
 /* Some state, yes it is evil globals */
 
 static enum Mode current_mode = MODE_UNKNOWN;
@@ -146,7 +129,7 @@ static enum KnownFormat current_output_format = FMT_UNKNOWN;
 
 
 /* Final checks to make sure all is right before running the actual program */
-static void verify_mode_and_formats(int input_count, char** input_files, char* output_file) {
+static void verify_mode_and_formats() {
     if (current_mode == MODE_UNKNOWN) {
         fprintf(stderr, "Error: Mode not set successfully (Reason unknown, likely a bug)\n");
         exit(EXIT_SUCCESS);
@@ -167,11 +150,13 @@ int main(int argc, char *argv[]) {
     const char *input_format = NULL;
     const char *output_format = NULL;
     const char *mode = NULL;
+    const char* extra = NULL;
 
     struct option long_options[] = {
         {"input-format",  required_argument, 0, 'I'},
         {"output-format", required_argument, 0, 'O'},
         {"mode",          required_argument, 0, 'm'},
+        {"extra-json",    required_argument, 0, 'e'},
         {"help",           no_argument,       0, 'h'},
         {"list-formats",no_argument,       0, 'F'},
         {"list-modes",no_argument,       0, 'M'},
@@ -179,7 +164,7 @@ int main(int argc, char *argv[]) {
     };
 
     int opt;
-    while ((opt = getopt_long(argc, argv, "I:O:m:hFM", long_options, NULL)) != -1) {
+    while ((opt = getopt_long(argc, argv, "I:O:m:hFMe:", long_options, NULL)) != -1) {
         switch (opt) {
         case 'I':
             input_format = optarg;
@@ -189,6 +174,9 @@ int main(int argc, char *argv[]) {
             break;
         case 'm':
             mode = optarg;
+            break;
+        case 'e':
+            extra = optarg;
             break;
         case 'M':
             print_modes();
@@ -268,7 +256,6 @@ int main(int argc, char *argv[]) {
             exit(EXIT_FAILURE);
         }
     }else {
-        printf("IC: %d IF: %d OF: %d\n", input_count, current_input_format, current_output_format);
         current_mode = autodetect_mode(input_count, current_input_format, current_output_format);
         if (current_mode == MODE_UNKNOWN) {
             fprintf(stderr, "Error: Cannot auto-detect mode! Please specify what mode you are using with the -m flag.");
@@ -277,9 +264,17 @@ int main(int argc, char *argv[]) {
         }
     }
 
+    verify_mode_and_formats();
+    struct ModeInfo info = (struct ModeInfo) {
+        current_mode,
+        current_input_format,
+        current_output_format,
+        input_count,
+        input_files,
+        output_file,
+        extra
+    };
 
 
-
-
-    return EXIT_SUCCESS;
+    return handleModes(&info);
 }

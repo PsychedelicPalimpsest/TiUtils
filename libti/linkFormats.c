@@ -5,11 +5,14 @@
 #include <stdlib.h>
 
 #include <endian.h>
-
+#include "cJSON.h"
 #include "hex.h"
 
 
 const char FLASH_MAGIC_NUMBER[8] = "**TIFL**";
+
+/* Not sure why TI adds this, but to be binary identical, we use it */
+const char TI_FOOTER[24] = "   -- CONVERT 2.6 --\r\n\x1a";
 
 
 
@@ -73,3 +76,60 @@ TiError parse_flash(struct FlashFile** dst, char* src, size_t length){
 
 	return ERR_OK;
 }
+
+
+static void cJSON_AddhexToObject(cJSON* dst, const char* name, unsigned char num) {
+	char out[2 + 2 + 1] = {0};
+	snprintf(out, sizeof(out), "0x%02X", num);
+
+	cJSON_AddStringToObject(dst, name, out);
+}
+static void cJSON_AddBCDDateToObject(cJSON* dst, const char* name, struct BCD_Date* date) {
+	char out[2 + 1 + 2 + 1 + 4 + 1] = {0};
+	snprintf(out, sizeof(out), "%02x/%02x/%02x%02x", date->dd, date->mm, date->yy1, date->yy2);
+
+	cJSON_AddStringToObject(dst, name, out);
+}
+
+
+
+
+TiError flash_file_to_json(cJSON** dst, struct FlashFile* src) {
+
+	if (!*dst) cJSON_Delete(*dst);
+	*dst = cJSON_CreateObject();
+	cJSON* root = *dst;
+
+	char rev[6] = {0};
+	char name[9] = {0};
+
+
+
+
+	snprintf(rev, sizeof(rev), "%02X.%02X", src->revMajor, src->revMinor);
+	snprintf(name, sizeof(name), "%.8s", src->name);
+
+
+	cJSON_AddStringToObject(root, "__FORMAT", "See here for more: https://merthsoft.com/linkguide/ti83+/fformat.html");
+
+	cJSON_AddStringToObject(root, "Revision", rev);
+	cJSON_AddhexToObject(root, "Flags", src->flags);
+	cJSON_AddhexToObject(root, "Object type", src->objectType);
+	cJSON_AddhexToObject(root, "Device type", src->deviceType);
+	cJSON_AddhexToObject(root, "Data type", src->dataType);
+	cJSON_AddStringToObject(root, "Name", name);
+	cJSON_AddNumberToObject(root, "Name length", src->nameLength);
+	cJSON_AddBCDDateToObject(root, "Date", &src->date);
+
+
+	if (src->dataLength > sizeof(TI_FOOTER)) {
+		/* TI OSes typically have a specific footer at the end */
+		if (0 == strcmp(src->intellHexData + src->dataLength - sizeof(TI_FOOTER)+1, TI_FOOTER))
+			cJSON_AddTrueToObject(root, "Force Convert Footer");
+	}
+
+
+	return ERR_OK;
+}
+
+
