@@ -1,1 +1,1 @@
-SUBDIRS = libti ticonv
+SUBDIRS = libti ticonv tidis

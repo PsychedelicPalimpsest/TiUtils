@@ -4,8 +4,6 @@
 
 #include <stdlib.h>
 #include <endian.h>
-#include <string.h>
-
 
 /*
  * Mostly just https://en.wikipedia.org/wiki/Intel_HEX, but the TI-84 has
@@ -118,9 +116,9 @@ TiError decode_page_data(struct IH_Part* dst, char* src, size_t length, char exp
 				goto SETUP_PAGE;
 				break;
 
-				/** Extended Segment Address:
-				 *  This specifies what page a page should contain
-				 */
+			/** Extended Segment Address:
+			 *  This specifies what page a page should contain
+			 */
 			case 0x2:
 				if (byte_count != 2){
 					LIBTI_ERROR("ERROR: the Extended Segment Address needs a byte count of two");
@@ -197,7 +195,7 @@ TiError encode_single_line(struct intel_hex_internal_data* state, char bytes, ch
 	}
 
 	char sum = 0;
-#pragma unroll
+#	pragma unroll
 	for (int i = 0; i < 4; i++)
 		sum += head[i];
 	for (int i = 0; i < bytes; i++)

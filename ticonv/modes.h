@@ -1,5 +1,5 @@
 #pragma once
-
+#include "fileFormats.h"
 
 enum Mode {
     MODE_UNKNOWN,
@@ -9,24 +9,11 @@ enum Mode {
 };
 
 
-enum KnownFormat {
-    FMT_UNKNOWN,
-
-    FMT_BIN,
-    FMT_ASM,
-    FMT_TXT,
-    FMT_IHX,
-
-    FMT_8XK,
-    FMT_8XU,
-    FMT_8XQ
-};
-
 struct ModeInfo {
     enum Mode mode;
 
-    enum KnownFormat inputFormat;
-    enum KnownFormat outputFormat;
+    enum FileFormat inputFormat;
+    enum FileFormat outputFormat;
 
     int in_file_count;
     char **input_files;

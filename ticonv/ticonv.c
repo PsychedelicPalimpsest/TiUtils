@@ -5,6 +5,9 @@
 
 /* See for a full list of modes and formats */
 #include "modes.h"
+#include "fileFormats.h"
+
+
 
 #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]))
 
@@ -17,26 +20,10 @@ struct ModeDef {
 struct ModeIdentification {
     enum Mode mode;
     char has_multi_input;
-    enum KnownFormat input_id[16];
-    enum KnownFormat output_id[16];
-};
-struct FormatMap {
-    enum KnownFormat format;
-    char force_format_name[128];
-    char format_id[16][128];
+    enum FileFormat input_id[16];
+    enum FileFormat output_id[16];
 };
 
-/* These are used to identify what file formats are being used */
-
-static const struct FormatMap FORMATS[] = {
-    { FMT_IHX,   "ihx", ".ihx", ".IHX"},
-    {FMT_ASM, "asm", ".asm", ".ASM", ".z80", ".Z80"},
-    {FMT_TXT, "txt", ".txt", ".TXT"},
-    {FMT_BIN, "bin", ".bin", ".BIN"},
-
-    {FMT_8XK, "8xk", ".8Xk", ".8xk"},
-    {FMT_8XU, "8xu", ".8Xu", ".8xu"},
-};
 
 struct ModeDef MODES[] = {
     {MODE_EXT_INTEL_HEX, "=ext_intel_hex"},
@@ -50,25 +37,8 @@ static const struct ModeIdentification MODE_ID[] = {
 };
 
 
-static char endswith(const char *str, const char *substr) {
-    size_t len_str = strlen(str);
-    size_t len_sub = strlen(substr);
-    return len_sub <= len_str &&
-           0 == strncmp(str + len_str - len_sub, substr, len_sub);
-}
 
-static enum KnownFormat lookup_format(const char *filename) {
-    #pragma unroll
-    for (int i = 0; i < ARRAY_SIZE(FORMATS); i++) {
-        for (int j = 0; FORMATS[i].format_id[j][0]; j++) {
-            if (endswith(filename, FORMATS[i].format_id[j])) {
-                return FORMATS[i].format;
-            }
-        }
-    }
-    return FMT_UNKNOWN;
-}
-static enum Mode autodetect_mode(int input_file_count, enum KnownFormat input_format, enum KnownFormat output_format) {
+static enum Mode autodetect_mode(int input_file_count, enum FileFormat input_format, enum FileFormat output_format) {
     for (int i = 0; i < ARRAY_SIZE(MODE_ID); i++) {
         char conforms_to_input = 0;
         char conforms_to_output = 0;
@@ -124,8 +94,8 @@ static void print_modes() {
 /* Some state, yes it is evil globals */
 
 static enum Mode current_mode = MODE_UNKNOWN;
-static enum KnownFormat current_input_format = FMT_UNKNOWN;
-static enum KnownFormat current_output_format = FMT_UNKNOWN;
+static enum FileFormat current_input_format = FMT_UNKNOWN;
+static enum FileFormat current_output_format = FMT_UNKNOWN;
 
 
 /* Final checks to make sure all is right before running the actual program */
@@ -203,6 +173,7 @@ int main(int argc, char *argv[]) {
     int input_count = argc - optind - 1;
     char **input_files = &argv[optind];
     char *output_file = argv[argc - 1];
+
 
 
     /* If the user forces a format, look it up, and use it */
