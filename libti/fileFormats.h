@@ -13,7 +13,8 @@ enum FileFormat {
 
     FMT_8XK,
     FMT_8XU,
-    FMT_8XQ
+    FMT_8XQ,
+    FMT_8XP
 };
 
 struct FormatMap {
@@ -29,8 +30,9 @@ static const struct FormatMap FORMATS[] = {
     {FMT_TXT, "txt", ".txt", ".TXT"},
     {FMT_BIN, "bin", ".bin", ".BIN"},
 
-    {FMT_8XK, "8xk", ".8Xk", ".8xk"},
-    {FMT_8XU, "8xu", ".8Xu", ".8xu"},
+    {FMT_8XK, "8xk", ".8Xk", ".8xk", ".8XK"},
+    {FMT_8XU, "8xu", ".8Xu", ".8xu", ".8XU"},
+    {FMT_8XP, "8xp", ".8xp", ".8Xp", ".8XP"}
 };
 
 char endswith(const char *str, const char *substr);

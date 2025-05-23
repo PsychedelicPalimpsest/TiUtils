@@ -1,4 +1,4 @@
-AC_INIT([TiDecompUtils], [0.1], [your@email.com])
+AC_INIT([TiDecompUtils], [0.1], [psychedelicpalimpsest@gmail.com])
 AM_INIT_AUTOMAKE([foreign subdir-objects])
 AC_PROG_CC
 AC_PROG_RANLIB

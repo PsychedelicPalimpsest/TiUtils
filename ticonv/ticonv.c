@@ -28,12 +28,18 @@ struct ModeIdentification {
 struct ModeDef MODES[] = {
     {MODE_EXT_INTEL_HEX, "=ext_intel_hex"},
     {MODE_PCK_INTEL_HEX, "=pck_intel_hex"},
+
+    {MODE_EXT_PROGRAM_BIN, "=ext_program_bin"},
+    {MODE_PCK_PROGRAM_BIN, "=pck_program_bin"}
 };
 
 /* What modes are autodetected/allowed for certain file formats */
 static const struct ModeIdentification MODE_ID[] = {
     {MODE_EXT_INTEL_HEX, 0, {FMT_8XK, FMT_8XU, FMT_8XQ, 0}, {FMT_IHX, 0} },
     {MODE_PCK_INTEL_HEX, 0, {FMT_IHX, 0}, {FMT_8XK, FMT_8XU, FMT_8XQ, 0} },
+
+    {MODE_EXT_PROGRAM_BIN, 0, {FMT_8XP, 0}, {FMT_BIN, 0}},
+    {MODE_PCK_PROGRAM_BIN, 0, {FMT_BIN, 0}, {FMT_8XP, 0}}
 };
 
 
@@ -79,23 +85,28 @@ static void print_help(const char *progname) {
 static void print_formats() {
     fprintf(stderr, "Formats supported for conversion:\n\n");
     fprintf(stderr, "\tExt\tName\t\tDescription\n");
-    fprintf(stderr, "\t8xp\tProgram\t\tTi-84 program file\n");
+    fprintf(stderr, "\t8xp\tApp\t\tTi-8x application\n");
     fprintf(stderr, "\t8xk\tApp\t\tTi-84 flash app\n");
     fprintf(stderr, "\t8xu\tOS\t\tTi-84 operating system\n");
     fprintf(stderr, "\t8xq\tOS\t\tTi-84 certificate\n");
+    fprintf(stderr, "\t8xk\tProgram\t\tTi-84 program file\n");
+
 }
 static void print_modes() {
     fprintf(stderr, "Formats modes for conversion:\n\n");
     fprintf(stderr, "\tName\t\t\tInput File extension(s)\t\tOutput file extension(s)\t\tDescription\n");
     fprintf(stderr, "\t-m=ext_intel_hex\t8xk, 8xu, 8xq\t\t\tihx\t\t\tExtracts the intel hex from a flash file. If the --extra-json is set, will write the metadata to that file\n");
     fprintf(stderr, "\t-m=pck_intel_hex\tihx\t\t\t\t8xk, 8xu, 8xq\t\tPacks the intel hex for a flash file. If the --extra-json is set, will read the metadata from that file\n");
+    fprintf(stderr, "\t-m=ext_program_bin\tbin\t\t\t\t8xp\t\t\tExtracts the binary from a program file. If the --extra-json is set, will read the metadata from that file\n");
 }
 
 /* Some state, yes it is evil globals */
-
 static enum Mode current_mode = MODE_UNKNOWN;
 static enum FileFormat current_input_format = FMT_UNKNOWN;
 static enum FileFormat current_output_format = FMT_UNKNOWN;
+
+char append_asmprog_token = 0;
+char skip_asmprog_token = 0;
 
 
 /* Final checks to make sure all is right before running the actual program */
@@ -114,8 +125,6 @@ static void verify_mode_and_formats() {
     }
 }
 
-
-
 int main(int argc, char *argv[]) {
     const char *input_format = NULL;
     const char *output_format = NULL;
@@ -130,11 +139,13 @@ int main(int argc, char *argv[]) {
         {"help",           no_argument,       0, 'h'},
         {"list-formats",no_argument,       0, 'F'},
         {"list-modes",no_argument,       0, 'M'},
+        {"append-asmprog-token", no_argument, 0, 'P'},
+        {"skip-asmprog-token", no_argument, 0, 'S'},
         {0, 0, 0, 0}
     };
 
     int opt;
-    while ((opt = getopt_long(argc, argv, "I:O:m:hFMe:", long_options, NULL)) != -1) {
+    while ((opt = getopt_long(argc, argv, "I:O:m:hFMPSe:", long_options, NULL)) != -1) {
         switch (opt) {
         case 'I':
             input_format = optarg;
@@ -157,6 +168,12 @@ int main(int argc, char *argv[]) {
         case 'h':
             print_help(argv[0]);
             return EXIT_SUCCESS;
+        case 'P':
+            append_asmprog_token = 1;
+            break;
+        case 'S':
+            skip_asmprog_token = 1;
+            break;
         default:
             print_help(argv[0]);
             return EXIT_FAILURE;

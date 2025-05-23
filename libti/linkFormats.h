@@ -4,7 +4,14 @@
 #include "cJSON.h"
 
 
-/* https://merthsoft.com/linkguide/ti83+/fformat.html */
+/*
+ * Main reference: https://merthsoft.com/linkguide/ti83+/fformat.html
+ * But the python library is also useful: https://github.com/TI-Toolkit/tivars_lib_py/tree/main
+ */
+
+
+
+
 
 enum DeviceType{
     DEVICE_TI73 = 0x74,
@@ -99,7 +106,7 @@ static void print_type_id(enum TypeID type) {
 }
 
 struct VariableEntry{
-	/* Always has a value of 11 or 13 (Bh or Dh). */
+	/* Always has a value of 11 or 13 (Bh or Dh). It acts as the "metadata length" */
 	uint16_t format;
 	uint16_t variableLength;
 
@@ -108,7 +115,7 @@ struct VariableEntry{
 	/* Variable name, padded with NULL characters*/
 	char name[8];
 
-	/* The following feilds only exist if format=Dh */
+	/* The following fields only exist if format=Dh */
 	
 	/* Typically zero */
 	uint8_t version;
@@ -141,10 +148,10 @@ struct VariableFile{
 	/* Comment. The comment is either zero-terminated 
 		or padded on the right with space characters. */
 	char comment[0x2A];
-	
+
 	uint16_t checksum;
 	uint16_t dataLength;
-	/* consists of a number of variable entries */
+	/* consists of a number of variable entries (note: This is raw binary not the parsed object) */
 	char data[];
 };
 
@@ -211,18 +218,51 @@ static void print_flash_file(struct FlashFile* file) {
 extern const char FLASH_MAGIC_NUMBER[8];
 extern const char TI_FOOTER[24];
 
-TiError parse_flash(struct FlashFile** dst, char* src, size_t length);
-TiError flash_file_to_json(cJSON** dst, struct FlashFile* src);
 
-/* Simple TI checksum alg. */
-static uint16_t calculate_sum(const char* in, size_t length){
-    uint16_t length16 = (uint16_t) length;
-    uint16_t sum = 2*(length16 & 0xFF) + 2*(length16 >> 8);
-    while(length--){
-        sum += *in;
-    }
-    return sum;
+
+TiError parse_flash(struct FlashFile** dst, char* src, size_t length);
+TiError write_flash(char** dst, struct FlashFile* src, size_t* delta);
+
+TiError flash_file_to_json(cJSON** dst, struct FlashFile* src);
+TiError flash_file_from_json(struct FlashFile* dst, cJSON* src);
+
+
+
+static uint16_t calculate_var_sum(const unsigned char* in, size_t length) {
+	uint16_t sum = 0;
+	for (size_t i = 0; i < length; i++) {
+		sum += in[i];
+	}
+	return sum;
 }
+
+// /* Simple TI checksum alg. */
+// static uint16_t calculate_sum(const char* in, size_t length){
+//     uint16_t length16 = (uint16_t) length;
+//     uint16_t sum = 2*(length16 & 0xFF) + 2*(length16 >> 8);
+//     while(length--){
+//         sum += *in;
+//     }
+//     return sum;
+// }
+
+
+TiError parse_variable(struct VariableFile** dst, char* src, size_t length);
+TiError write_variable(char** dst, struct VariableFile* src, size_t* delta);
+
+TiError parse_variable_entry(struct VariableEntry** dst, char* src, size_t length, size_t* delta);
+TiError write_variable_entry(char** dst, struct VariableEntry* src, size_t* delta);
+
+TiError variable_file_to_json(cJSON** dst, struct VariableFile* src);
+TiError variable_entry_to_json(cJSON** dst, struct VariableEntry* src);
+
+TiError variable_entry_from_json(struct VariableEntry* dst, cJSON* src);
+TiError variable_from_json(struct VariableFile* dst, cJSON* src);
+
+static char test_asm_prog_tok(unsigned char* dst) {
+	return dst[0] == 0xbbu && dst[1] == 0x6du;
+}
+
 
 
 /* TODO: 8xk sum via https://github.com/alberthdev/spasm-ng/blob/master/export.cpp */

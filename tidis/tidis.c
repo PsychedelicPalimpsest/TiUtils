@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stddef.h>
 
+#include "fileFormats.h"
 
 
 static const char* input_json = NULL;
@@ -9,6 +10,9 @@ static const char* input_file= NULL;
 static const char* output_folder= NULL;
 
 static char force = 0;
+
+
+static enum FileFormat input_file_format;
 
 
 const struct option long_options[] = {
@@ -22,7 +26,7 @@ const struct option long_options[] = {
 
 int main(int argc, char *argv[]){
     int opt;
-    while ((opt = getopt_long(argc, argv, "j:f:o:F:", long_options, NULL)) != -1) {
+    while ((opt = getopt_long(argc, argv, "j:f:o:F", long_options, NULL)) != -1) {
        switch (opt) {
             case 'j':
                 input_json = optarg;
@@ -41,10 +45,17 @@ int main(int argc, char *argv[]){
                 return -1;
         }
     }
-    if (input_json == NULL || input_file == NULL || output_folder == NULL){
+    if (input_file == NULL || output_folder == NULL){
         fprintf(stderr, "Please use required args\n");
         return -1;
     }
+    if (input_json != NULL && !endswith(input_json, ".json")){
+        fprintf(stderr, "Input JSON must be .json\n");
+        return -1;
+    }
+
+    input_file_format = lookup_format(input_file);
+
 
 
     return 0;

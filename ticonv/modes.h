@@ -6,6 +6,9 @@ enum Mode {
 
     MODE_EXT_INTEL_HEX,
     MODE_PCK_INTEL_HEX,
+
+    MODE_EXT_PROGRAM_BIN,
+    MODE_PCK_PROGRAM_BIN,
 };
 
 
@@ -14,6 +17,12 @@ struct ModeInfo {
 
     enum FileFormat inputFormat;
     enum FileFormat outputFormat;
+
+    /* Various settings */
+
+
+
+
 
     int in_file_count;
     char **input_files;
