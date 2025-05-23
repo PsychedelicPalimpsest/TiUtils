@@ -4,15 +4,8 @@
 
 #include "fileFormats.h"
 
+#include "common.h"
 
-static const char* input_json = NULL;
-static const char* input_file= NULL;
-static const char* output_folder= NULL;
-
-static char force = 0;
-
-
-static enum FileFormat input_file_format;
 
 
 const struct option long_options[] = {

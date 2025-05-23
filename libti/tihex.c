@@ -175,7 +175,7 @@ struct intel_hex_internal_data {
 	size_t offset;
 	char** dst;
 };
-TiError encode_single_line(struct intel_hex_internal_data* state, char bytes, char record_type, uint16_t addr, char* byte_data) {
+static void encode_single_line(struct intel_hex_internal_data* state, char bytes, char record_type, uint16_t addr, char* byte_data) {
 	char head[4] = {bytes, 0, 0, record_type};
 	*(uint16_t*)&head[1] = htobe16(addr);
 
