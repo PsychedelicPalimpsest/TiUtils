@@ -101,7 +101,7 @@ CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
 am_tidis_OBJECTS = tidis.$(OBJEXT) common.$(OBJEXT) app.$(OBJEXT) \
-	asmProg.$(OBJEXT) os.$(OBJEXT)
+	asmProg.$(OBJEXT) os.$(OBJEXT) makefile.$(OBJEXT)
 tidis_OBJECTS = $(am_tidis_OBJECTS)
 tidis_DEPENDENCIES = ../libti/libti.a
 AM_V_P = $(am__v_P_@AM_V@)
@@ -120,7 +120,8 @@ DEFAULT_INCLUDES = -I.@am__isrc@
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__maybe_remake_depfiles = depfiles
 am__depfiles_remade = ./$(DEPDIR)/app.Po ./$(DEPDIR)/asmProg.Po \
-	./$(DEPDIR)/common.Po ./$(DEPDIR)/os.Po ./$(DEPDIR)/tidis.Po
+	./$(DEPDIR)/common.Po ./$(DEPDIR)/makefile.Po \
+	./$(DEPDIR)/os.Po ./$(DEPDIR)/tidis.Po
 am__mv = mv -f
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
@@ -251,7 +252,7 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-tidis_SOURCES = tidis.c common.c app.c asmProg.c os.c
+tidis_SOURCES = tidis.c common.c app.c asmProg.c os.c makefile.c
 tidis_LDADD = ../libti/libti.a
 AM_CPPFLAGS = -I$(top_srcdir)/libti/
 all: all-am
@@ -343,6 +344,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/app.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/asmProg.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/common.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/makefile.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/os.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tidis.Po@am__quote@ # am--include-marker
 
@@ -497,6 +499,7 @@ distclean: distclean-am
 	-rm -f ./$(DEPDIR)/app.Po
 	-rm -f ./$(DEPDIR)/asmProg.Po
 	-rm -f ./$(DEPDIR)/common.Po
+	-rm -f ./$(DEPDIR)/makefile.Po
 	-rm -f ./$(DEPDIR)/os.Po
 	-rm -f ./$(DEPDIR)/tidis.Po
 	-rm -f Makefile
@@ -547,6 +550,7 @@ maintainer-clean: maintainer-clean-am
 	-rm -f ./$(DEPDIR)/app.Po
 	-rm -f ./$(DEPDIR)/asmProg.Po
 	-rm -f ./$(DEPDIR)/common.Po
+	-rm -f ./$(DEPDIR)/makefile.Po
 	-rm -f ./$(DEPDIR)/os.Po
 	-rm -f ./$(DEPDIR)/tidis.Po
 	-rm -f Makefile

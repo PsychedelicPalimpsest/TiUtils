@@ -367,7 +367,7 @@ TiError write_variable_entry(char** dst, struct VariableEntry* src, size_t* delt
 }
 
 
-TiError variable_file_to_json(cJSON** dst, struct VariableFile* src) {
+TiError variable_to_json(cJSON** dst, struct VariableFile* src) {
 	if (!*dst) *dst = cJSON_CreateObject();
 	cJSON* root = *dst;
 	char comment[43] = {0};

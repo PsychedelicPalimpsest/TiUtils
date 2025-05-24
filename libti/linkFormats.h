@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include "cJSON.h"
 
+#include "libti.h"
 
 /*
  * Main reference: https://merthsoft.com/linkguide/ti83+/fformat.html
@@ -253,10 +254,10 @@ TiError write_variable(char** dst, struct VariableFile* src, size_t* delta);
 TiError parse_variable_entry(struct VariableEntry** dst, char* src, size_t length, size_t* delta);
 TiError write_variable_entry(char** dst, struct VariableEntry* src, size_t* delta);
 
-TiError variable_file_to_json(cJSON** dst, struct VariableFile* src);
 TiError variable_entry_to_json(cJSON** dst, struct VariableEntry* src);
-
 TiError variable_entry_from_json(struct VariableEntry* dst, cJSON* src);
+
+TiError variable_to_json(cJSON** dst, struct VariableFile* src);
 TiError variable_from_json(struct VariableFile* dst, cJSON* src);
 
 static char test_asm_prog_tok(unsigned char* dst) {
@@ -264,8 +265,6 @@ static char test_asm_prog_tok(unsigned char* dst) {
 }
 
 
-
-/* TODO: 8xk sum via https://github.com/alberthdev/spasm-ng/blob/master/export.cpp */
 
 
 

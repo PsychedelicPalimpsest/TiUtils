@@ -254,7 +254,7 @@ int handleExtractProgramBin(struct ModeInfo* mode_info) {
             LIBTI_ERROR("ERROR: extra output file %s cannot be written too. Os error: %s\n", mode_info->extra, strerror(errno));
         }
         cJSON* json = NULL;
-        variable_file_to_json(&json, file);
+        variable_to_json(&json, file);
         variable_entry_to_json(&json, prog);
         char* str = cJSON_Print(json);
 
